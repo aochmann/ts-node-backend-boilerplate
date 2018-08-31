@@ -1,14 +1,15 @@
 {
-  "name": "webpack_node_weapi",
+  "name": "webpack_node_webapi",
   "version": "0.1.0",
-  "main": "./dist/server.js",
+  "main": "./dist/app.js",
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "pm2": "pm2 start ./dist/server.js",
+    "pm2": "pm2 start ./dist/app.js",
     "postinstall": "npm run build",
     "test": "jest --forceExit",
     "test-ci": "npm test && cat ./coverage/lcov.info | coveralls",
-    "start": "node ./dist/server.js"
+    "start": "npm run build && node ./dist/app.js",
+    "start2": "webpack-dev-server --config webpack.config.js --history-api-fallback --hot --inline --port 3000"
   },
   "author": "Adrian Ochmann",
   "license": "MIT",
@@ -50,9 +51,12 @@
   "devDependencies": {
     "@types/body-parser": "^1.16.4",
     "@types/chai": "^4.0.1",
+    "@types/cors": "^2.8.4",
     "@types/dotenv": "^4.0.0",
     "@types/express": "^4.0.36",
+    "@types/helmet": "0.0.40",
     "@types/jest": "^20.0.4",
+    "@types/morgan": "^1.7.35",
     "@types/node": "^8.0.13",
     "@types/supertest": "^2.0.2",
     "chai": "^4.1.0",
@@ -69,8 +73,16 @@
   },
   "dependencies": {
     "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
-    "pm2": "^2.7.1"
+    "helmet": "^3.13.0",
+    "inversify": "^4.13.0",
+    "inversify-binding-decorators": "^4.0.0",
+    "inversify-express-utils": "^6.1.0",
+    "inversify-logger-middleware": "^3.1.0",
+    "morgan": "^1.9.0",
+    "pm2": "^2.7.1",
+    "reflect-metadata": "^0.1.12"
   }
 }

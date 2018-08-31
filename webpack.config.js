@@ -9,10 +9,10 @@ fs.readdirSync('node_modules')
   });
 
 module.exports = {
-  entry: './src/server.ts',
+  entry: './src/app.ts',
   output: {
     path: __dirname + '/dist',
-    filename: 'server.js',
+    filename: 'app.js',
   },
   resolve: {
     // Add '.ts' and '.tsx' as a resolvable extension.

@@ -1,6 +1,6 @@
 {
   "files": [
-    "src/server.ts"
+    "src/app.ts"
   ],
   "include": [
     "src/**/*.ts"
@@ -14,8 +14,11 @@
     "sourceMap": true,
     "baseUrl": ".",
     "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "removeComments": true,
-    "typeRoots": [ "node_modules/@types" ],
+    "typeRoots": ["node_modules/@types"],
+    "types": ["reflect-metadata"],
     "paths": {
       "*": [
         "node_modules/@types/*",

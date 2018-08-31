@@ -1,18 +1,59 @@
-import * as express from 'express';
 import * as dotenv from 'dotenv';
 import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
+import * as morgan from 'morgan';
+import * as helmet from 'helmet';
 
 dotenv.config();
 
-const app = express();
+import 'reflect-metadata';
 
-app.set('port', process.env.PORT || 3000);
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.listen(app.get('port'), () => {
-  console.log(('App is running at http://localhost:%d in %s mode'),
-    app.get('port'), app.get('env'));
-  console.log('Press CTRL-C to stop\n');
-});
+import { Container } from 'inversify';
+import { InversifyExpressServer } from 'inversify-express-utils';
+import { buildProviderModule } from 'inversify-binding-decorators';
+import { makeLoggerMiddleware } from 'inversify-logger-middleware';
+import './controllers';
 
-export default app;
+class Server {
+  private container: Container;
+  private server: InversifyExpressServer;
+
+  constructor() {
+    this.container = new Container();
+    this.server = new InversifyExpressServer(this.container, null, { rootPath: '/api' });
+  }
+
+  public config = (): Server => {
+    this.server = this.server.setConfig(app => {
+      app.use(cors());
+      app.use(
+        bodyParser.urlencoded({
+          extended: true
+        })
+      );
+      app.use(bodyParser.json());
+      app.use(morgan('combined'));
+      app.use(helmet());
+
+      if (process.env.NODE_ENV === 'development') {
+        const logger = makeLoggerMiddleware();
+        this.container.applyMiddleware(logger);
+    }
+
+    });
+
+    return this;
+  };
+
+  public build = (): Server => {
+    this.container.load(buildProviderModule());
+    return this;
+  };
+
+  public run = () => this.server.build().listen(3000, () => {
+    console.log(' Server is running');
+    console.log(' Press CTRL-C to stop\n');
+  });
+}
+
+export { Server };
