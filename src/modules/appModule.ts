@@ -1,5 +1,9 @@
-import { ContainerModule } from 'inversify';
+import { Container } from 'inversify';
+import { IGreatingService, GreatingService } from '../services/greatingServices';
+import { ServiceTypes } from '../types/type';
 
-class AppModule extends ContainerModule {
-
+export class AppModule {
+  public static load(container: Container) {
+    container.bind<IGreatingService>(ServiceTypes.IGreating).to(GreatingService);
+  }
 }

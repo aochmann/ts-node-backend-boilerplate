@@ -13,6 +13,7 @@ import { InversifyExpressServer } from 'inversify-express-utils';
 import { buildProviderModule } from 'inversify-binding-decorators';
 import { makeLoggerMiddleware } from 'inversify-logger-middleware';
 import './controllers';
+import { AppModule } from './modules';
 
 class Server {
   private container: Container;
@@ -47,6 +48,7 @@ class Server {
 
   public build = (): Server => {
     this.container.load(buildProviderModule());
+    AppModule.load(this.container);
     return this;
   };
 
